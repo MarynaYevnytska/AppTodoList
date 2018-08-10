@@ -1,0 +1,112 @@
+* {
+  box-sizing: border-box;
+}
+.container {
+  min-height: 100%;
+  width: 100%;
+}
+h1{
+  display: -webkit-inline-flex;
+  display: flex;
+  justify-content:center;
+  color:#0000b3;
+}
+/* Remove margins and padding from the list */
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the list items */
+.rowCheckIn{
+  display:flex;
+  justify-content:space-between;
+  cursor: pointer;
+  padding: 15px;
+  background: #eee;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Set all odd list items to a different color (zebra-stripes) */
+.rowCheckIn:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+/* Darker background-color on hover */
+.rowCheckIn:hover {
+  background: #ffe6e6;
+}
+
+
+/* When clicked on, add a background color and strike out text */
+.rowCheckOut{
+  display:flex;
+  justify-content:space-between;
+  cursor: pointer;
+  background-color: #b3b3ff;
+  font-size: 18px;
+  padding: 15px;
+  text-decoration: line-through;
+
+}
+
+/* Style the close button */
+.rowTextClose {
+  display: -webkit-inline-flex;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  height: 25px;
+  width: 25px;
+  border-radius:50%;
+  transition-property: width font-size;
+  font-size: 22px;
+  transition-duration: 2s
+
+}
+
+.rowTextClose:hover {
+  background: #e0e0eb;
+  width: 50px;
+  height: 50px;
+  font-size: 16px;
+
+}
+
+/* Style the input */
+input {
+  margin: 0;
+  border: blue;
+  border-radius: 0;
+  height: 50px;
+  width: 75%;
+  padding: 10px;
+  font-size: 18px;
+}
+
+/* Style the "Add" button */
+.addBtn {
+  padding: 10px;
+  height: 50px;
+  width: 10%;
+  background: #d9d9d9;
+  color: #555;
+  float: right;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 18px;
+  border: 5px solid transparent;
+  border-image: linear-gradient(to left, transparent 10%, #ADF2F7 100%);
+}
+
+.addBtn:hover {
+  background: #bbb;
+}
+li:hover{
+  background: #ffe6e6;
+}
