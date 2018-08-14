@@ -20,14 +20,93 @@
     <h1> My To Do List</h1>
     <div id="tdlApp">
         <form action="/ToDoList" method="post">
-        <input type="text" name="task" id="addProject" placeholder="Enter new task">  </input>
-        <input type="submit" value="Send">  </input>
-             <div class="listRow">
-                     <ul id="MyList">
+            <div class="first_row">
+                <input type="text" name="task" id="addProject" placeholder="Enter new task">  </input>
+                <span onclick="newElement()" class="addBtn">  Add  </span>
+                <button type="button"> Edit </button>
+                <button type="button"> Delete </button>
+            </div>
+            <div class="listRow">
+                <ul id="MyList">
 
-                        </ul>
-             </div>
+                </ul>
+            </div>
+            <input type="submit"  value="Add todo List">  </input>
         </form>
+    </div>
+</div>
+
+
+<script>
+//enter all the task on the page from data base
+    function reqListener () {
+        var list = document.getElementById("MyList");
+        var lisTask = document.createElement('ul');
+        var TodoList = JSON.parse(this.responseText);
+        var TodoArray=TodoList.results;
+        var lenArray=TodoArray.length;
+        console.log(TodoList,TodoArray,lenArray);
+        for(var j=0; j<lenArray; j++){
+            console.log(TodoArray[j], typeof TodoArray[j]);
+            var rowTask=TodoArray[j];
+            var valueFORenter = rowTask.taskName;
+            //console.log(valueFORenter);
+            var rowNext = document.createElement('li');
+            rowNext.className='rowCheckIn';
+            var rowText= document.createTextNode(valueFORenter);
+            var rowTextClose = document.createTextNode('X');
+            var rowNextClose = document.createElement('div');
+            rowNext.append(rowText);
+            rowNextClose.append(rowTextClose);
+            rowNext.append( rowNextClose );
+            lisTask.append(rowNext );
+        };
+        return list.append(lisTask);
+    };
+
+    var oReq = new XMLHttpRequest();
+    oReq.onload = reqListener;
+    oReq.open("post", "/", true);
+    oReq.send();
+
+// Add tasks to database
+
+var list = document.getElementById("MyList");
+var project=document.getElementById('addProject');
+var lisTask = document.createElement('ul');
+var ProjectArray=[];
+function makeCounter() {
+    var currentCount = ProjectArray.length;
+    return function() {
+        return currentCount++;
+    };
+};
+var keyCouter = makeCounter();
+function newElement(){
+    var tasksObject={};
+    var keyMask='maskId';
+    var key=keyMask+keyCouter();
+    var text=project.value;
+    console.log("This is key" + key);
+    project.value="";
+    if(text.length > 0) {
+        tasksObject['id']=key;
+        tasksObject['task']=text;
+        ProjectArray.push(tasksObject);
+        console.log(ProjectArray );
+        console.log(ProjectArray.length);
+    };
+    var li_next = document.createElement('li');
+    var textElem = document.createTextNode(text);
+    li_next.className="rowCheckIn";
+    li_next.appendChild(textElem);
+    list.append(li_next);
+};
+
+
+</script>
+
+
 </body>
 </html>
 

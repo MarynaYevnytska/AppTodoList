@@ -16,6 +16,11 @@ ul {
   margin: 0;
   padding: 0;
 }
+.first_row {
+  display:flex;
+  justify-content:space-between;
+}
+
 
 /* Style the list items */
 .rowCheckIn{
