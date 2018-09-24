@@ -9,23 +9,27 @@ h1{
   display: -webkit-inline-flex;
   display: flex;
   justify-content:center;
-  color:#0000b3;
+  color:#004d00;
+}
+form{
+  display: flex;
+  justify-content:space-between;
+  align-items:center;
 }
 /* Remove margins and padding from the list */
 ul {
   margin: 0;
   padding: 0;
+
 }
 .first_row {
   display:flex;
   justify-content:space-between;
 }
 
-
-/* Style the list items */
 .rowCheckIn{
   display:flex;
-  justify-content:space-between;
+  justify-content:flex-end;
   cursor: pointer;
   padding: 15px;
   background: #eee;
@@ -34,65 +38,101 @@ ul {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  border-bottom: solid 1px grey;
 }
 
-/* Set all odd list items to a different color (zebra-stripes) */
-.rowCheckIn:nth-child(odd) {
-  background: #f9f9f9;
-}
+
+
 
 /* Darker background-color on hover */
 .rowCheckIn:hover {
   background: #ffe6e6;
+  border-bottom: slategrey;
 }
 
-
-/* When clicked on, add a background color and strike out text */
-.rowCheckOut{
-  display:flex;
-  justify-content:space-between;
-  cursor: pointer;
-  background-color: #b3b3ff;
-  font-size: 18px;
-  padding: 15px;
-  text-decoration: line-through;
-
-}
-
-/* Style the close button */
-.rowTextClose {
-  display: -webkit-inline-flex;
+/* Style the delet/edit button  */
+.wrapDelEd {
+  background: #f9f9f9;
   display: flex;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
-  height: 25px;
-  width: 25px;
-  border-radius:50%;
-  transition-property: width font-size;
-  font-size: 22px;
-  transition-duration: 2s
-
-}
-
-.rowTextClose:hover {
-  background: #e0e0eb;
-  width: 50px;
-  height: 50px;
+  width: 20%;
   font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.wrapDelEd:nth-child(odd) {
+  background:#eee;
+}
+.btEdit {
+  text-align: center;
+  vertical-align: middle;
+  width: 45px;
+  height: 45px;
+  font-size: 16px;
+  }
+.btDelete{
+  text-align:center;
+  vertical-align: middle;
+  width: 45px;
+  height: 45px;
+  font-size: 15px;
+  border-radius:50%;
 
 }
+.btDelete:hover {
+  background: #e6ffe6;
+  border-radius:50%;
+
+}
+.btEdit:hover {
+  background: #e6ffe6;
+  border-radius:50%;
+
+}
+li{  color:green;}
+
 
 /* Style the input */
-input {
+input[type="text"] {
+  margin: 0;
+  border-radius: 0;
+  height: 50px;
+  width: 55%;
+  padding: 10px;
+  font-size: 18px;
+}
+input[type="data"] {
   margin: 0;
   border: blue;
   border-radius: 0;
   height: 50px;
-  width: 75%;
+  width: 25%;
   padding: 10px;
   font-size: 18px;
 }
-
+li{
+  border-bottom: slategrey;
+}
+li:hover{
+  background: #ffe6e6;
+  border-bottom: slategrey;
+}
+li div:nth-child(1){
+  width: 75%;
+  height: 45px;
+}
+.priorityElem{
+  text-align:center;
+  vertical-align: middle;
+  width: 45px;
+  height: 45px;
+  font-size: 15px;
+  border-radius:50%;
+  font-size: 22px;
+}
 /* Style the "Add" button */
 .addBtn {
   padding: 10px;
@@ -112,6 +152,71 @@ input {
 .addBtn:hover {
   background: #bbb;
 }
-li:hover{
-  background: #ffe6e6;
+.inputEdit{
+  width: 80%;
+  background: palevioletred;
+}
+.btChange{
+  background: grey;
+}
+
+
+.slider {
+  -webkit-appearance: none;
+  width: 5%;
+  height: 15px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #4CAF50;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4CAF50;
+  cursor: pointer;
+}
+.gameOver{
+  display:flex;
+  justify-content:flex-end;
+  cursor: pointer;
+  padding: 15px;
+  background:#ff751a;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border-bottom: solid 1px grey;
+}
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+input[type="date"]{
+  border: none;
+  height: 50px;
+  width: 130px;
+  margin: 0;
+}
+select{
+  border: none;
+  height: 50px;
+  width: 130px;
+  margin: 0;
 }

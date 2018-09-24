@@ -11,103 +11,266 @@
     <meta name="robots" content="index, follow"> <!--nofollow - переход по ссылкам запрещен, noindex - индексация запрещена-->
     <link rel="stylesheet" href="stylesheets/style.css"> <!--подключение стилей на странице, link the CSS-->
     <link rel="shortcut icon" href="favicon.png" type="image/png"> <!--иконка на вкладке браузера-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <title> TODOList </title>
 
 </head>
 <body>
 
+
+
 <div class="container">
     <h1> My To Do List</h1>
-    <div id="tdlApp">
-        <form action="/ToDoList" method="post">
-            <div class="first_row">
-                <input type="text" name="task" id="addProject" placeholder="Enter new task">  </input>
-                <span onclick="newElement()" class="addBtn">  Add  </span>
-                <button type="button"> Edit </button>
-                <button type="button"> Delete </button>
-            </div>
-            <div class="listRow">
-                <ul id="MyList">
-
-                </ul>
-            </div>
-            <input type="submit"  value="Add todo List">  </input>
+        <form action="#" name="addTask" method="POST">
+        <input type="text" name="task" id="addProject" placeholder="Enter new task">  </input> <!--! Создаю поле для ввода-->
+        <input type="range" name="rate" min="0" max="100" step="1" value="0" class="slider">  </input> <!--! Создаю поле для ввода-->
+            <select lable="Priority">
+            <option value="0"> Choose priority </option>
+            <option value="4"> Low  </option>
+            <option value="3"> Minor</option>
+            <option value="2"> Major </option>
+            <option value="1"> Hight </option>
+        </select>
+            <input type="date" >
+        <span  class="addBtn" onclick="newElement()">  Add  </span> </input> <!--! Создаю блочный єлемент на который вешаю задание при каждом одном клике выполнить функцию "newElement()"-->
         </form>
-    </div>
-</div>
+        <ul id="MyList"> <!--!Создаю список с уникальным идентификатором-->
+
+        </ul>
+
+        <script>
+            var list = document.getElementById("MyList"); <!--!Объявляю переменную  и кладу в нее ссылку на список, который оперделяю по ID, list - это обращение к списку ul id="MyList" -->
+            var project=document.getElementById('addProject'); <!--!Объявляю переменную  и кладу в нее ссылку на поле для ввода, который оперделяю по ID, list - это обращение к списку ul id="MyList" -->
+            var ForMa=document.forms.addTask;<!--!Объявляю переменную  и кладу в нее ссылку на список -->
+            var fElementRate=ForMa.elements[1];
+            var fElementPrioryti=ForMa.elements[2];
+            var fElementData=ForMa.elements[3];
+            var lisTask = document.createElement('ul'); <!--Создаю элемнет DOM -->
+            function newElement(){
+                alert( fElementRate.value + fElementPrioryti.value + fElementData.value );
+                console.log('ФОРМА' + ForMa);
+                var text=project.value;<!--Объявляю  переменную text кладу в нее значение техстового поля введенного в input с ID ddProject, который лежит в переменной  project-->
+                if(text.length > 0) {<!--Если  длина строки из текствого поля больш ноля выполняется следущий код -->
+                    var li_next = document.createElement('li'); <!--Обявление переменной , которую клаедтся   вновь созданный элемент   списка -->
+                    var wrapText= document.createElement('div');
+                    var textElem = document.createTextNode(text); <!--Создание  текстового узла, со хначением равным значению из поля input c ID addProject -->
+                    li_next.className="rowCheckIn"; <!--Присваивание класса строке, для возмодности раьоты с CSSи др. -->
+                    wrapText.appendChild(textElem); <!--Объедиение строки списка и текстового узла -->
+                    li_next.appendChild(wrapText);
+                    list.append(li_next); <!--Добавление новой строки в список id="MyList" в разметке HTML -->
+                }
+                project.value=""; <!--Очистка строки для ввода -->
+                console.log('Have worked!!!', typeof(text)); <!--Проверяю что код отработал до этого места без сбоев и вывожу тип переменной text в консоль -->
+                var NewTaskReq = new XMLHttpRequest(); <!--Создаю новый XMLHttp - запрос от клиета серверу  -->
+                NewTaskReq.open("post", "/newTask", true); <!--Настраиваю новый XMLHttp - запрос от клиета серверу, указываю тип предачи данных POST и адрес(метку) /newTask на которой он должен найти следующие указания для действий на сервере  -->
+                console.log(text); <!--Проверяю что лежит в ячейке text  -->
+                NewTaskReq.onreadystatechange = function () { <!--Проверяю статус выполенния запроса  -->
+                    if (NewTaskReq.readyState === 4 && NewTaskReq.status == 200) {
+                        console.log(NewTaskReq.readyState); <!--вывожу в консоль статус выполнея запроса  -->
+                        alert('hooray all exist'); <!--вывожу в сообщение на экран, просто чтобы было прияно что запрос существует  -->
+                    };
+                };
+                var body={"task":text, "rate":fElementRate.value, "priority":fElementPrioryti.value,"data":fElementData.value}; <!--создаю объект javascript , "priority":low, "rate":rateProgress-->
+                console.log(typeof (fElementData.value), body); <!--провереяю его тип-->
+                NewTaskReq.setRequestHeader('Content-type','application/json; charset=utf-8');
+                NewTaskReq.send(JSON.stringify(body));  <!--коввертирую объкт JS в JSON строку и отпраляю на сервер-->
+            };
+            function reqListener(){
+                    var now=new Date();
+                    var toDay = now.getDate();
+                    var toMonth=now.getMonth();
+                    var toYear=now.getFullYear();
+                    var today=+toYear+toMonth+toDay;
+                        console.log(today + 'Сегодня'  + typeof (today));
+                    var TodoList = JSON.parse(oReq.responseText);
+                    var TodoArray = TodoList.results;
+                    var lenArray = TodoArray.length;
+                    console.log(TodoList, TodoArray, lenArray);
+                    TodoArray.sort(function (a, b) {
+                        return a.taskPriority - b.taskPriority;
+                    });
+                        for (var j = 0; j < lenArray; j++) {
+                        var rowTask = TodoArray[j];
+                        var valueFORenter = rowTask.taskName;
+                        var valuePriority = rowTask.taskPriority;
+                        var valueRate = rowTask.taskRate;
+                        var valueDate = rowTask.taskDate;
+                        var arrValueDate = valueDate.split('-');
+                        var NumberVD=+(+arrValueDate[0])+(+arrValueDate[1])+(+arrValueDate[2]);
+                        console.log(valueFORenter, valuePriority, valueRate,arrValueDate,NumberVD,  typeof (NumberVD));
+                        var valueID = rowTask._id;
+                        var rowNext = document.createElement('li');
+                        var wrapText= document.createElement('div');
+                        wrapText.className='wrapText';
+                        rowNext.setAttribute("id", valueID);
+                        rowNext.setAttribute("taskName", valueFORenter);
+                        var btEdit = document.createElement('div');
+                        btEdit.className = 'btEdit';
+                        var btDelete = document.createElement('div');
+                        btDelete.className = 'btDelete';
+                        btEdit.className = 'btEdit';
+                        rowNext.className = 'rowCheckIn';
+                        var rowText = document.createTextNode(valueFORenter);
+                        var btDeleteText=document.createElement('i');
+                        btDeleteText.className="fas fa-trash-alt";
+                        var btEditText = document.createElement('i');
+                        btEditText.className="fas fa-edit";
+                        /* важность*/
+                        var priorityElem=document.createElement('div');
+                        priorityElem.className="priorityElem";
+                        var textPriority = document.createElement('i');
+//                            console.log(valuePriority);
+                                if(valuePriority==4){textPriority.className="fas fa-thermometer-empty"};
+                                if(valuePriority==3){textPriority.className="fas fa-thermometer-quarter"};
+                                if(valuePriority==2){textPriority.className="fas fa-thermometer-half"};
+                                if(valuePriority==1){textPriority.className="fas fa-thermometer-full"};
+                            /* выполнение*/
+                                var rate=document.createElement('input');
+                                rate.setAttribute("type", "range");
+                                rate.setAttribute("value", valueRate);
+                                rate.className='slider';
+                                rate.name="valueRateElemEdit";
+                                var rateProgress=rate.value;
+                            if (NumberVD<today & rateProgress<100 ){
+                                rowNext.className='gameOver';
+                                rowText=document.createTextNode(valueFORenter + " SOO SORRY TIME IS UP !");
+                                console.log('TRUE ПРАВДА! ПРАВДА! ПРАВДА!' + rowText);
+                            }else{console.log( now + 'NOT EQUAL'+ valueDate +'  FALSE FALSE FALSE  ' + valueDate )}
+//                            console.log(rateProgress);
+                        wrapText.append(rowText);
+                        btDelete.append(btDeleteText);
+                        btEdit.append(btEditText);
+                        priorityElem.append(textPriority);
+                        rowNext.append(wrapText);
+                        rowNext.append(btDelete);
+                        rowNext.append(btEdit);
+                        rowNext.append(priorityElem);
+                        rowNext.appendChild(rate);
+                        lisTask.append(rowNext);
+                };
+                list.append(lisTask);
+                list.addEventListener("click", DOevent, false);
+                        function DOevent(){
+                                function delTask(valueId){
+                                    console.log('Function' + valueId);
+                                    var DELReq = new XMLHttpRequest();
+                                    DELReq.open("delete",'/' + valueId, true);
+                                    DELReq.onreadystatechange = function () {
+                                        if (DELReq.readyState === 4 && DELReq.status == 200) {
+                                            console.log(DELReq.readyState);
+                                        };
+                                    };
+                                    DELReq.send();
+                                };
+                                function editTask(valueId,valueFORenter){
+//                                    console.log('Function' + valueId);
+                                    var wrapInputEdit=document.createElement('div');
+                                    var inputEdit = document.createElement('input');// создаю новый инпут
+                                    inputEdit.setAttribute('type','text');
+                                    var btChange= document.createElement('button');// создаю кнопку изменить
+                                    btChange.value=valueId;
+                                    btChange.name='changeTask';
+                                    var textChange=document.createTextNode('Yes');// создаю текст на кнопке
+                                    inputEdit.placeholder=`${valueFORenter}`; // вывожу в плейсхолдер текст прежней задачи
+                                    inputEdit.name="valueInputEdit"; // назанчаю атрибут инпута name
+                                    btChange.className="btChange";// присваиваю клас кнопке
+                                    var priorityElem = document.createElement('select');
+                                    priorityElem.name="valuePriorityElemEdit";
+                                    var LowElem = document.createElement('option');
+                                    LowElem.value='4';
+                                    var MinorElem = document.createElement('option');
+                                    MinorElem.value='3';
+                                    var MajorElem = document.createElement('option');
+                                    MajorElem.value='2';
+                                    var HightElem = document.createElement('option');
+                                    HightElem.value='1';
+                                    var textLow=document.createTextNode('Low');
+                                    var textMinor=document.createTextNode('Minor');
+                                    var textMajor=document.createTextNode('Major');
+                                    var textHight=document.createTextNode('Hight');
+                                    var DataElemen=document.createElement('input');
+                                    DataElemen.setAttribute("type", "date");
+                                    DataElemen.name="valueDateElemEdit";
+                                    wrapInputEdit.append(inputEdit);
+                                    elem.replaceChild( wrapInputEdit,elem.childNodes[0]); // заменяю в строке все новым инпутом
+                                    elem.removeChild(elem.childNodes[1]);// заменяю в строке все новым инпутом
+                                    elem.removeChild(elem.childNodes[1]);// заменяю в строке все новым инпутом
+                                    elem.removeChild(elem.childNodes[1]);// заменяю в строке все новым инпутом
+                                    LowElem.append(textLow);
+                                    MinorElem.append(textMinor);
+                                    MajorElem.append(textMajor);
+                                    HightElem.append(textHight);
+                                    priorityElem.append(LowElem);
+                                    priorityElem.append(MinorElem);
+                                    priorityElem.append(MajorElem);
+                                    priorityElem.append(HightElem);
+                                    btChange.append(textChange);// добавляю на кнопку текст change
+                                    elem.append( priorityElem);
+                                    elem.append( DataElemen);
+                                    elem.append( btChange);// добавляю в старую строку кнупку change
+                                    btChange.addEventListener("click", DOedit, false); //вешаю на кнопку change событие один клик
+                                    function DOedit (){
+                                        var newTask=document.getElementsByName('valueInputEdit'); //отыскиваю инпут
+                                        var newPriority=document.getElementsByName('valuePriorityElemEdit'); //отыскиваю инпут
+                                        var newRate=document.getElementsByName('valueRateElemEdit'); //отыскиваю ползунок
+                                        var newDate=document.getElementsByName('valueDateElemEdit'); //отыскиваю дату
+                                        console.log(typeof (newTask, newPriority, newRate,newDate),newTask,newPriority, newRate,newDate );
+                                        var newTaskValue=`${newTask[0].value}`; //сохранеяю значение из поля для ввода
+                                        var newPriorytiValue=`${newPriority[0].value}`;//сохранеяю значение приоритета
+                                        var newRateValue=`${newRate[0].value}`;//сохранеяю значение готовности
+                                        var newDateiValue=`${newDate[0].value}`;//сохранеяю значение даты
+//                                        console.log(newTaskValue, newPriorytiValue, newRateValue, newDateiValue);
+//                                        console.log("!!Результат поиска строка ввода**   " + newTaskValue + " Приоритет " + newPriorytiValue + " Готовность "  + newRateValue + "Дата окончания" + newDateiValue ); //проверяю что получилось ,"rate":newTaskRate, "priority":newTaskPrioryti,"data":newTaskDate
+                                        if (newTaskValue.length>0){var NTVforSend=newTaskValue}else{NTVforSend=`${valueFORenter}`};
+                                        var body={"newTask":NTVforSend, "id":valueId,"rate":newRateValue,"priority":newPriorytiValue, "data":newDateiValue};//создаю объект
+                                        newTaskValue.value="";//очищаю поле
+                                        var UPDReq = new XMLHttpRequest();//создаю запрос
+                                        UPDReq.open("PATCH",'/' + valueId, true);//натстраиваю запорс по ID
+                                        UPDReq.onreadystatechange = function () {
+                                            if (UPDReq.readyState === 4 && UPDReq.status == 200) {
+                                                console.log(UPDReq.readyState);
+                                            };
+                                        };
+                                        console.log(typeof (body), body); <!--провереяю его тип-->
+                                        UPDReq.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                        UPDReq.send(JSON.stringify(body));  <!--коввертирую объкт JS в JSON строку и отпраляю на сервер-->
+                                    };
 
 
-<script>
-//enter all the task on the page from data base
-    function reqListener () {
-        var list = document.getElementById("MyList");
-        var lisTask = document.createElement('ul');
-        var TodoList = JSON.parse(this.responseText);
-        var TodoArray=TodoList.results;
-        var lenArray=TodoArray.length;
-        console.log(TodoList,TodoArray,lenArray);
-        for(var j=0; j<lenArray; j++){
-            console.log(TodoArray[j], typeof TodoArray[j]);
-            var rowTask=TodoArray[j];
-            var valueFORenter = rowTask.taskName;
-            //console.log(valueFORenter);
-            var rowNext = document.createElement('li');
-            rowNext.className='rowCheckIn';
-            var rowText= document.createTextNode(valueFORenter);
-            var rowTextClose = document.createTextNode('X');
-            var rowNextClose = document.createElement('div');
-            rowNext.append(rowText);
-            rowNextClose.append(rowTextClose);
-            rowNext.append( rowNextClose );
-            lisTask.append(rowNext );
-        };
-        return list.append(lisTask);
-    };
+                        };
+                    var target = event.target;
+                    var appTarget=target.className;
+                    var elem=target.parentNode;
+                    console.log(elem, elem.firstElementChild);
+                    var valueId=elem.getAttribute("id");
+                    var valueFORenter=elem.getAttribute("taskName");
+                    console.log('значение задачи' + valueFORenter);
+                    if (appTarget==="btDelete"){
+                        console.log('Will be delete');
+                        console.log('значение ID   ' + valueId);
+                        delTask(valueId); // delete the tasks from Project
+                    }
+                    if (appTarget==="btEdit"){
+                        console.log('Will be change');
+//                        console.log('значение ID   ' + valueId);
+                        editTask(valueId,valueFORenter);// edit the tasks from Project
+                    }
+                };
 
-    var oReq = new XMLHttpRequest();
-    oReq.onload = reqListener;
-    oReq.open("post", "/", true);
-    oReq.send();
+            };
 
-// Add tasks to database
-
-var list = document.getElementById("MyList");
-var project=document.getElementById('addProject');
-var lisTask = document.createElement('ul');
-var ProjectArray=[];
-function makeCounter() {
-    var currentCount = ProjectArray.length;
-    return function() {
-        return currentCount++;
-    };
-};
-var keyCouter = makeCounter();
-function newElement(){
-    var tasksObject={};
-    var keyMask='maskId';
-    var key=keyMask+keyCouter();
-    var text=project.value;
-    console.log("This is key" + key);
-    project.value="";
-    if(text.length > 0) {
-        tasksObject['id']=key;
-        tasksObject['task']=text;
-        ProjectArray.push(tasksObject);
-        console.log(ProjectArray );
-        console.log(ProjectArray.length);
-    };
-    var li_next = document.createElement('li');
-    var textElem = document.createTextNode(text);
-    li_next.className="rowCheckIn";
-    li_next.appendChild(textElem);
-    list.append(li_next);
-};
+            var oReq = new XMLHttpRequest();
+            oReq.open("post", "/", true);
+            oReq.onreadystatechange = function () {
+                if (oReq.readyState === 4 && oReq.status == 200) {
+                    console.log(oReq.readyState);
+                    reqListener();
+                };
+            };
+            oReq.send();
 
 
-</script>
+        </script>
 
-
-</body>
-</html>
 
 
